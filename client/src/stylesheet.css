@@ -1,0 +1,106 @@
+h2{
+    color: rgb(59, 59, 59);
+    text-align: center;
+    margin: 30px;
+    padding: 30px;
+}
+
+p{
+    color: rgb(36, 35, 35);
+    text-align: center;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+
+  background: linear-gradient(135deg, #c880ff 0%, #FFE99A 100%);
+  min-height: 100vh;
+}
+
+
+.flex-container
+{
+    flex-direction:column;
+    background-color :rgba(255, 255, 255, 0.7);
+    height: auto;
+    width: 35%;
+    margin: auto;
+    justify-content: center;
+    border-radius: 15px;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+input
+{
+    color: rgb(61, 61, 61);
+    text-align: center;
+    margin-left: 25%;
+    margin-right: 5%;
+    size: 90%;
+    padding: 5px;
+    border-radius: 5px;
+    border-color: rgb(231, 231, 231);
+}
+
+.flex-container>button
+{
+    background-color: rgb(23, 186, 99);
+    border:none;
+    color:aliceblue;
+    border-radius: 5px;
+}
+
+.flex-container>ul
+{
+    text-align: justify;
+    color: rgb(78, 78, 78);
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    list-style-type: none;
+}
+
+button
+{
+    background-color: rgb(23, 186, 99);
+    border:none;
+    color:aliceblue;
+    border-radius: 5px;
+    align-items: left;
+    margin:10px;
+    cursor: pointer;
+}
+
+button:hover
+{
+    box-shadow: 0 4px 8px 0 rgba(176, 173, 173, 0.2), 0 6px 20px 0 rgba(192, 192, 192, 0.19);
+
+}
+
+.button2
+{
+    background-color: #ffffff;
+    border:none;
+    color:aliceblue;
+    border-radius: 1000px;
+    align-items: left;
+    margin:5px;
+}
+
+.details
+{
+    background-color: rgb(255, 255, 255);
+    width:85%;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    align-items: center;
+    align-content: center;
+}
+
+.details:hover
+{
+    box-shadow: 0 4px 8px 0 rgba(176, 173, 173, 0.2), 0 6px 20px 0 rgba(192, 192, 192, 0.19);
+}

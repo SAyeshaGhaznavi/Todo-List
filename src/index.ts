@@ -1,6 +1,19 @@
-import express from 'express';
+//import express from 'express';
+import express,{ Request, Response, NextFunction } from 'express';
 import pool from './db';
 import cors from 'cors';
+
+interface TodoRequestBody {
+  todoNo: number;
+  details?: string;
+  Done?: boolean;
+}
+
+interface Todo {
+  todoNo: number;
+  details: string;
+  done: string;
+}
 
 
 const app = express();
@@ -27,10 +40,19 @@ app.get('/', async (_req, res) => {
   }
 });
 
-app.get('/:id', (req, res) => {
-  const { todoNo } = req.query;
-  res.send(`New Page: ${todoNo}`);
+app.get('/todos/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query('SELECT * FROM TODO WHERE todoNo = $1', [id]);
+    const todo = result.rows[0];
+    res.json(todo);
+  } catch (error) {
+    console.error('Error fetching TODO by ID:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
+
+
 
 app.post('/', async (req, res) => {
   const details = req.body;
@@ -52,53 +74,38 @@ app.post('/', async (req, res) => {
   }
 });
 
-app.delete('/', async(req, res)=>{
-    const deleteID=req.body;
-    console.log("Body ",req.body);
-    console.log("details: ", deleteID.todoNo)
+app.delete('/:id', async (req, res) => {
+  //const { todoNo } = req.params.id;
+  console.log("Deleting todoNo: ", req.params.id);
 
-    try {
-
-        const result=await pool.query(`DELETE from TODO where todoNo=${deleteID.todoNo}`);
-        pool.query(`UPDATE TODO set todoNo=todoNo-1 where todoNo>${deleteID.todoNo}`);
-        res.status(201).json(result.rows[0]);
-    } catch (error) {
-        console.error('Error deleting TODO:', error);
-        res.status(500).json({ message: 'Error' });
-    }
-
+  try {
+    await pool.query(`DELETE FROM TODO WHERE todoNo = $1`, [req.params.id]);
+    //await pool.query(`UPDATE TODO SET todoNo = todoNo - 1 WHERE todoNo > $1`, [req.params.id]);
+    res.status(200).json({ message: 'Deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting TODO:', error);
+    res.status(500).json({ message: 'Error' });
+  }
 });
 
-app.put('/', async(req, res)=>{
-    const Update=req.body;
-    console.log("Body ",req.body);
-    console.log("ID: ", Update.todoNo);
-    
-    if(!Update.Done)
-    {
-        try {
-            console.log("Details: ", Update.details);
-            const result=await pool.query(`UPDATE TODO 
-                SET details='${Update.details}' 
-                where todoNO=${Update.todoNo};`);
-            res.status(201).json(result.rows[0]);
-        } catch (error) {
-            console.error('Error Updating TODO:', error);
-            res.status(500).json({ message: 'Error' });
-        }
+
+app.put('/', async (req: Request<{}, {}, TodoRequestBody>, res: Response) => {
+  const { todoNo, details, Done } = req.body;
+
+  try {
+    if (details !== undefined) {
+      await pool.query(`UPDATE TODO SET details = $1 WHERE todoNo = $2`, [details, todoNo]);
     }
-    else if(!Update.details)
-    {
-        try {
-            console.log("Done: ", Update.Done);
-            const result=await pool.query(`UPDATE TODO 
-                SET Done='${Update.Done}' 
-                where todoNO=${Update.todoNo};`);
-            res.status(201).json(result.rows[0]);
-        } catch (error) {
-            console.error('Error Updating TODO:', error);
-            res.status(500).json({ message: 'Error' });
-        }
+
+    if (Done !== undefined) {
+      await pool.query(`UPDATE TODO SET Done = $1 WHERE todoNo = $2`, [Done, todoNo]);
     }
+
+    res.status(200).json({ message: 'Updated successfully' });
+  } catch (error) {
+    console.error('Error updating TODO:', error);
+    res.status(500).json({ message: 'Error' });
+  }
 });
+
 
