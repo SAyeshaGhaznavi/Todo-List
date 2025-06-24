@@ -9,13 +9,6 @@ interface TodoRequestBody {
   Done?: boolean;
 }
 
-interface Todo {
-  todoNo: number;
-  details: string;
-  done: string;
-}
-
-
 const app = express();
 const port: number = 5000;
 app.use(express.json());
